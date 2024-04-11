@@ -4,14 +4,14 @@ class Solution {
         if(k==n){
             return "0";
         }
-        Stack<Integer> s = new Stack<>();
+        Stack<Character> s = new Stack<>();
         int i = 0;
-        while(i<n){
-            while(k>0 && !s.isEmpty() && s.peek() > num.charAt(i) - '0'){
+        while(i<num.length()){
+            while(k>0 && !s.isEmpty() && s.peek() > num.charAt(i)){
                 s.pop();
                 k--;
             }
-            s.push(num.charAt(i) - '0');
+            s.push(num.charAt(i));
             i++;
         }
         while(k>0){
