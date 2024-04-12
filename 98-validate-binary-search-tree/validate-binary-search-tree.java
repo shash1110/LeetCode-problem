@@ -21,5 +21,5 @@ class Solution {
         if(A==null) return true;
         if(A.val <= min || A.val >= max) return false;
         return isValidBST(A.left, min, A.val) && isValidBST(A.right, A.val, max);
-    }
+    } 
 }
