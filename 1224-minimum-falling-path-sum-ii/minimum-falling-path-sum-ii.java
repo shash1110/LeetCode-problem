@@ -1,25 +1,41 @@
+class Triplet{
+    int minSum;
+    int secondMinSum;
+    int minSumIndex;
+    
+    Triplet(int minSum, int secondMinSum, int minSumIndex){
+        this.minSum = minSum;
+        this.secondMinSum = secondMinSum;
+        this.minSumIndex = minSumIndex;
+    }
+}
 class Solution {
     public int minFallingPathSum(int[][] grid) {
         int n = grid.length;
-        int dp[][] = new int [n][n];
-        for(int i = 0;i<n;i++){
-            for(int j=0;j<n;j++){
-                dp[i][j] = -1;
+        return minFallingPathSum(0,grid).minSum;
+    }
+
+    private Triplet minFallingPathSum(int row, int[][] grid){
+
+        if(row == grid.length){
+            return new Triplet(0,0,0);
+        }
+
+        Triplet nextRowTriplet = minFallingPathSum(row+1, grid); //trying passing row++
+        Triplet currentTriplet = new Triplet(Integer.MAX_VALUE, Integer.MAX_VALUE, -1);
+
+        for(int col = 0; col<grid[0].length; col++){
+            int sum = grid[row][col] + ((col != nextRowTriplet.minSumIndex) ? nextRowTriplet.minSum : nextRowTriplet.secondMinSum);
+            if(sum <= currentTriplet.minSum){
+                currentTriplet.secondMinSum = currentTriplet.minSum;
+                currentTriplet.minSum = sum;
+                currentTriplet.minSumIndex = col;
+            }else if(sum < currentTriplet.secondMinSum){
+                currentTriplet.secondMinSum = sum;
             }
         }
-        int min = helper(0,-1,n,grid,dp);
-        return min;
-    }
-    public int helper(int curr_row, int prev_col, int n, int [][] mat, int dp[][]){
-        if(curr_row==n) return 0;
-        if(prev_col != -1 && dp[curr_row][prev_col] != -1) return dp[curr_row][prev_col];
-        int ans = Integer.MAX_VALUE;
-        for(int i=0;i<n;i++){
-            if(i==prev_col) continue;
-            int curr = mat[curr_row][i]+ helper(curr_row+1, i, n, mat, dp);
-            ans = Math.min(ans, curr);
-        }
-        if(prev_col != -1) dp[curr_row][prev_col]=ans;
-        return ans;
+
+        return currentTriplet;
     }
 }
+
