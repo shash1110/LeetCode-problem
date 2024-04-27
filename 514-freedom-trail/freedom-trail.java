@@ -1,20 +1,25 @@
 class Solution {
-    public int findRotateSteps(String ring, String key) {
-        int n = ring.length();
-        int m = key.length();
-        int[][] dp = new int[m+1][n];
-        for(int i=m-1;i>=0;i--){
-            for(int j=0;j<n;j++){
-                dp[i][j] = Integer.MAX_VALUE;
-                for(int k=0;k<n;k++){
-                    if(ring.charAt(k)==key.charAt(i)){
-                        int diff = Math.abs(j-k);
-                        int step = Math.min(diff, n-diff);
-                        dp[i][j] = Math.min(dp[i][j], step + dp[i+1][k]);
-                    }
-                }
-            }
+  public int findRotateSteps(String ring, String key) {
+    Map<String, Integer> mem = new HashMap<>();
+    return dfs(ring, key, 0, mem) + key.length();
+  }
+  private int dfs(final String ring, final String key, int index, Map<String, Integer> mem) {
+        if (index == key.length())
+        return 0;
+        final String hashKey = ring + index;
+        if (mem.containsKey(hashKey))
+        return mem.get(hashKey);
+        
+        int ans = Integer.MAX_VALUE;
+        for (int i = 0; i < ring.length(); ++i)
+        if (ring.charAt(i) == key.charAt(index)) {
+            final int minRotates = Math.min(i, ring.length() - i);
+            final String newRing = ring.substring(i) + ring.substring(0, i);
+            final int remainingRotates = dfs(newRing, key, index + 1, mem);
+            ans = Math.min(ans, minRotates + remainingRotates);
         }
-        return dp[0][0]+m;
-    }
+
+        mem.put(hashKey, ans);
+        return ans;
+  }
 }
