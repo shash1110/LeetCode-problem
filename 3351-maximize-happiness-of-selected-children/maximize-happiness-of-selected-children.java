@@ -1,5 +1,3 @@
-import java.util.Arrays;
-
 class Solution {
     public long maximumHappinessSum(int[] h, int k) {
         Arrays.sort(h);
