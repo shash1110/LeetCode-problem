@@ -1,16 +1,15 @@
+import java.util.Arrays;
+
 class Solution {
-    public long maximumHappinessSum(int[] happiness, int k) {
-       Arrays.sort(happiness);
-        int len = happiness.length;
-        long ans = 0;
-        long sub = 0;
-        for (int i = len - 1; i >= 0; i--) {
-            if (happiness[i] - sub >= 0)
-                ans += happiness[i] - sub;
-            sub++;
-            if (sub == k)
-                break;
+    public long maximumHappinessSum(int[] h, int k) {
+        Arrays.sort(h);
+        int l = h.length, s = 0;
+        long a = 0, b = 0;
+        for (int i = l - 1; i >= 0; i--) {
+            if (h[i] - b >= 0) a += h[i] - b;
+            b++;
+            if (b == k) break;
         }
-        return ans;
+        return a;
     }
 }
