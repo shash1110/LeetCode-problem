@@ -9,9 +9,12 @@ class Solution {
         String[] parts = date.split("-");
         int year = Integer.parseInt(parts[0]), month = Integer.parseInt(parts[1]), day = Integer.parseInt(parts[2]);
         int count = day;
-        for (int i = 1971; i < year; i++) count += (isLeapYear(i)) ? 366 : 365;
-        for (int i = 0; i < month - 1; i++) count += months[i];
-        if (month > 2 && isLeapYear(year)) count += 1;
+        for (int i = 1971; i < year; i++) 
+            count += (isLeapYear(i)) ? 366 : 365;
+        for (int i = 0; i < month - 1; i++) 
+            count += months[i];
+        if (month > 2 && isLeapYear(year)) 
+            count += 1;
         return count;
     }
     
