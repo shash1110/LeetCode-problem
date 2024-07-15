@@ -19,20 +19,28 @@ import static java.lang.System.mapLibraryName;
  */
 class Solution {
     public TreeNode createBinaryTree(int[][] descriptions) {
-        Set<Integer> kids = new HashSet<>();
-        Map<Integer, TreeNode> m = new HashMap<>();
-        for (int[] d : descriptions) {
-            int parent = d[0], kid = d[1], left = d[2];
-            m.putIfAbsent(parent, new TreeNode(parent));
-            m.putIfAbsent(kid, new TreeNode(kid));
-            kids.add(kid);
-            if (left == 1) {
-                m.get(parent).left = m.get(kid);
-            }else {
-                m.get(parent).right = m.get(kid);
-            }
+        final TreeNode[] nodes = new TreeNode[100001];
+        final boolean[] children = new boolean[100001];
+
+        for(final int[] description : descriptions) {
+            if(nodes[description[0]] == null)
+                nodes[description[0]] = new TreeNode(description[0]);
+
+            if(nodes[description[1]] == null)
+                nodes[description[1]] = new TreeNode(description[1]);
+
+            if(description[2] == 0)
+                nodes[description[0]].right = nodes[description[1]];
+            else
+                nodes[description[0]].left = nodes[description[1]];
+
+            children[description[1]] = true;
         }
-        m.keySet().removeAll(kids);
-        return m.values().iterator().next();
+
+        for(final int[] description : descriptions)
+            if(!children[description[0]])
+                return nodes[description[0]];
+
+        return null;
     }
 }
