@@ -1,25 +1,31 @@
 class Solution {
-        public int[] sortJumbled(int[] mapping, int[] nums) {
-        int n = nums.length, k = 0;
-        Integer[] indices = new Integer[n];
-        for (int i = 0; i < n; ++i)
-            indices[i] = i;
-        Arrays.sort(indices, Comparator.comparing(i -> convert(nums[i], mapping)));
-     // return Stream.of(indices).mapToInt(i -> nums[i]).toArray();
-        int[] ans = new int[n];
-        for (int idx : indices)
-            ans[k++] = nums[idx];
-        return ans;
-    }
-    private int convert(int num, int[] mapping) {
-        if (num == 0)
-            return mapping[0];
-        int n = 0, f = 1;
-        while (num > 0) {
-            n += mapping[num % 10] * f;
-            f *= 10;
-            num /= 10;
+    public int[] sortJumbled(int[] mapping, int[] nums) {
+        List<int[]> storePairs = new ArrayList<int[]>();
+
+        for (int i = 0; i < nums.length; i++) {
+            int mappedValue = 0;
+            int temp = nums[i];
+            int place = 1;
+
+            if (temp == 0) {
+                storePairs.add(new int[] { mapping[0], i });
+                continue;
+            }
+            while (temp != 0) {
+                mappedValue = place * mapping[temp % 10] + mappedValue;
+                place *= 10;
+                temp /= 10;
+            }
+            storePairs.add(new int[] { mappedValue, i });
         }
-        return n;
+
+        Collections.sort(storePairs, (a, b) -> a[0] - b[0]);
+
+        int[] answer = new int[nums.length];
+        for (int i = 0; i < storePairs.size(); i++) {
+            answer[i] = nums[storePairs.get(i)[1]];
+        }
+
+        return answer;
     }
 }
